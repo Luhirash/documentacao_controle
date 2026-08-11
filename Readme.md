@@ -134,3 +134,53 @@ Pipeline:
     Percepção -> Mapeamento -> Controle
 
     Telemetria (em Paralelo)
+
+
+## 3. Conceitos Base
+Agora já inciando a física do controle, devemos apresentar os conceitos e modelos físicos que embasam todo nosso controle dinâmico. Para isso, vamos falar em alguns tópicos de física que retratam matematicamente o comportamento de um veículo.(Para aqueles que ainda não tiveram tanto contato com físca 1 ou não tem uma base sólida em dinâmica, recomenda-se revisar um pouco para melhor entendimento)
+
+### 3.1 O Modelo Bicicleta (Bicycle Model)
+O modelo bicicleta é a base matemática mais famosa e essencial para começarmos a entender a dinâmica veicular lateral. Ele recebe esse nome porque simplifica as quatro rodas do nosso veículo em apenas duas (uma dianteira e uma traseira), posicionadas ao longo do eixo central longitudinal do chassi.
+
+**Por que usamos?**
+Calcular a força, o escorregamento e a suspensão em quatro pneus separadamente exige um modelo complexo (*Full Car Model*). Para o controle de trajetória (nosso foco principal ao receber dados do Mapeamento[cite: 1]), assumimos que os ângulos de esterçamento das rodas direita e esquerda são iguais e desconsideramos a rolagem ou "mergulho" do chassi. Isso reduz drasticamente a carga computacional da nossa Jetson e facilita o projeto dos algoritmos.
+
+**Variáveis importantes no Centro de Gravidade (CG):**
+*(Sugestão: Adicionar aqui uma imagem do diagrama de corpo livre do modelo bicicleta visto de cima)*
+*   $L_f$: Distância do Centro de Gravidade (CG) até o eixo dianteiro.
+*   $L_r$: Distância do CG até o eixo traseiro.
+*   $\delta$ (delta): Ângulo de esterçamento da roda dianteira (O output direto que enviamos para o nosso motor de steering!).
+*   $\psi$ (psi): Ângulo de guinada (*yaw* ou *heading*), indicando para onde o nariz do carro está apontando em relação ao mapa global[cite: 1].
+*   $V$: Velocidade vetorial no CG.
+
+Esse modelo cinemático é o coração geométrico que faz os algoritmos de Controle Lateral funcionarem.
+
+### 3.2 Divisão do Controle: Longitudinal e Lateral
+Para transformar a arte de dirigir em linhas de código, dividimos o problema em duas frentes que atuam de forma conjunta, mas com funções bem diferentes:
+
+*   **Controle Longitudinal (Aceleração e Frenagem):** É responsável por controlar a velocidade e a posição do carro ao longo da pista. É ele que determina o torque necessário que os motores elétricos devem aplicar nas rodas ou a pressão de frenagem.
+*   **Controle Lateral (Direção):** É o responsável por "virar o volante". Seu objetivo é manter o carro exatamente sobre a trajetória (*waypoints*) enviada pelo Mapeamento[cite: 1], atuando no motor de steering para corrigir desvios laterais.
+
+### 3.3 PID (Proporcional, Integral, Derivativo)
+*(Sugestão: Inserir um GIF de um sistema (como um pêndulo ou mola) oscilando e depois estabilizando com PID)*
+
+O PID não é um modelo físico, mas sim o algoritmo de malha fechada mais clássico e versátil da engenharia de controle. Ele calcula uma força de correção baseada em três pilares do erro (a diferença entre onde estamos e onde queremos estar):
+*   **Proporcional (P):** Reage ao erro atual. Se a velocidade está muito abaixo do alvo, ele acelera bastante.
+*   **Integral (I):** Acumula os erros do passado. Ajuda a vencer resistências constantes (como uma subida ou atrito) que o fator P não conseguiu zerar.
+*   **Derivativo (D):** Prevê o futuro com base na taxa de variação do erro. Funciona como um "amortecedor" para evitar que o carro passe do ponto e comece a oscilar.
+
+No Driverless, usamos PIDs para tarefas de baixo nível, como garantir que o motor de steering gire exatamente os radianos que pedimos, ou no controle longitudinal para manter uma velocidade alvo constante.
+
+### 3.4 Pure Pursuit
+O *Pure Pursuit* é um controlador lateral puramente geométrico. Imagine que o nosso carro está "perseguindo" um ponto virtual (*look-ahead point*) que está alguns metros à frente na trajetória[cite: 1]. O algoritmo desenha um arco de circunferência perfeito saindo do eixo traseiro do carro até atingir esse alvo.
+*   **Prós:** Muito robusto, simples de implementar em C/C++ ou Python[cite: 1] e fácil de sintonizar.
+*   **Contras:** Pode acabar "cortando curvas" se configurarmos o ponto de perseguição longe demais.
+
+*(Sugestão: Adicionar um desenho mostrando o arco do Pure Pursuit ligando o carro a um waypoint no mapa)*
+
+### 3.5 Controlador Stanley
+Desenvolvido pela equipe de Stanford (vencedora do DARPA Grand Challenge), o *Stanley* é um controlador lateral que atua de forma diferente. Em vez de olhar para um ponto distante, ele toma como referência o centro do **eixo dianteiro** do nosso modelo bicicleta e busca minimizar dois erros simultaneamente:
+1.  **Erro de Trilha (Cross-track error):** A distância perpendicular do eixo dianteiro até a linha ideal da trajetória.
+2.  **Erro de Orientação (Heading error):** A diferença angular entre para onde o carro está apontando ($\psi$) e para onde a pista está indo.
+
+O Stanley costuma apresentar uma resposta de direção mais natural e precisa em curvas fechadas e manobras agressivas do que o Pure Pursuit.
