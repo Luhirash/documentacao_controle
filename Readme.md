@@ -155,7 +155,7 @@ Antes de entrarmos nos algoritmos, precisamos separar duas coisas fundamentais n
 *   **Para Controle Lateral (Steering):** Usamos o *Modelo Bicicleta* (Física) como base para que os controladores *Pure Pursuit* ou *Stanley* (Algoritmos) calculem o ângulo do volante.
 *   **Para Controle Longitudinal (Velocidade):** Usamos a *Física Newtoniana 1D* e a aerodinâmica (Modelo) como base para que o controlador *PID* (Algoritmo) calcule o torque de aceleração ou a força de frenagem.
 
-### 3.3 O Modelo Bicicleta (Bicycle Model)
+### 3.3 O Modelo Bicicleta (Bicycle Model) -- Controle Lateral
 O modelo bicicleta é a base matemática mais famosa e essencial para começarmos a entender a dinâmica veicular lateral. Ele recebe esse nome porque simplifica as quatro rodas do nosso veículo em apenas duas (uma dianteira e uma traseira), posicionadas ao longo do eixo central longitudinal do chassi.
 
 **Por que usamos?**
@@ -174,23 +174,23 @@ Esse modelo cinemático é o coração geométrico que faz os algoritmos de Cont
 Para ter uma noção geral desse modelo, anexamos uma video aula da University of Luebeck do professor Georg Schildbach em que ele desenvolve todas as equações cinemáticas do modelo(funções horárias da velocidade), e há também uma aula gravada por nós, que, sem desenvolver muito as funções, explicita melhor esse modelo.
 
 aula do you tube: https://www.youtube.com/watch?v=HqNdBiej23I
-nossa aula: 
+nossa aula: https://drive.google.com/drive/folders/1i2RLIqJ51yxYU1YGerNFYHo_kMkyF3uq
 
-### 3.4 Pure Pursuit
+### 3.4 Pure Pursuit -- Controle Lateral
 O *Pure Pursuit* é um controlador lateral puramente geométrico. Imagine que o nosso carro está "perseguindo" um ponto virtual (*look-ahead point*) que está alguns metros à frente na trajetória[cite: 1]. O algoritmo desenha um arco de circunferência perfeito saindo do eixo traseiro do carro até atingir esse alvo.
 *   **Prós:** Muito robusto, simples de implementar em C/C++ ou Python[cite: 1] e fácil de sintonizar.
 *   **Contras:** Pode acabar "cortando curvas" se configurarmos o ponto de perseguição longe demais.
 
 *(Sugestão: Adicionar um desenho mostrando o arco do Pure Pursuit ligando o carro a um waypoint no mapa)*
 
-### 3.5 Controlador Stanley
+### 3.5 Controlador Stanley -- Controle Lateral 
 Desenvolvido pela equipe de Stanford (vencedora do DARPA Grand Challenge), o *Stanley* é um controlador lateral que atua de forma diferente. Em vez de olhar para um ponto distante, ele toma como referência o centro do **eixo dianteiro** do nosso modelo bicicleta e busca minimizar dois erros simultaneamente:
 1.  **Erro de Trilha (Cross-track error):** A distância perpendicular do eixo dianteiro até a linha ideal da trajetória.
 2.  **Erro de Orientação (Heading error):** A diferença angular entre para onde o carro está apontando ($\psi$) e para onde a pista está indo.
 
 O Stanley costuma apresentar uma resposta de direção mais natural e precisa em curvas fechadas e manobras agressivas do que o Pure Pursuit.
 
-### 3.3 PID (Proporcional, Integral, Derivativo)
+### 3.3 PID (Proporcional, Integral, Derivativo) -- Controle Longitudinal 
 *(Sugestão: Inserir um GIF de um sistema (como um pêndulo ou mola) oscilando e depois estabilizando com PID)*
 
 O PID não é um modelo físico, mas sim o algoritmo de malha fechada mais clássico e versátil da engenharia de controle. Ele calcula uma força de correção baseada em três pilares do erro (a diferença entre onde estamos e onde queremos estar):
@@ -199,4 +199,6 @@ O PID não é um modelo físico, mas sim o algoritmo de malha fechada mais clás
 *   **Derivativo (D):** Prevê o futuro com base na taxa de variação do erro. Funciona como um "amortecedor" para evitar que o carro passe do ponto e comece a oscilar.
 
 No Driverless, usamos PIDs para tarefas de baixo nível, como garantir que o motor de steering gire exatamente os radianos que pedimos, ou no controle longitudinal para manter uma velocidade alvo constante.
+
+Vídeo do YouTube: 
 
