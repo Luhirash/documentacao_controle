@@ -155,7 +155,7 @@ Antes de entrarmos nos algoritmos, precisamos separar duas coisas fundamentais n
 *   **Para Controle Lateral (Steering):** Usamos o *Modelo Bicicleta* (Física) como base para que os controladores *Pure Pursuit* ou *Stanley* (Algoritmos) calculem o ângulo do volante.
 *   **Para Controle Longitudinal (Velocidade):** Usamos a *Física Newtoniana 1D* e a aerodinâmica (Modelo) como base para que o controlador *PID* (Algoritmo) calcule o torque de aceleração ou a força de frenagem.
 
-### 3.3 O Modelo Bicicleta (Bicycle Model) -- Controle Lateral
+### 3.3 O Modelo Bicicleta (Bicycle Model) -- Modelo para Controle Lateral
 O modelo bicicleta é a base matemática mais famosa e essencial para começarmos a entender a dinâmica veicular lateral. Ele recebe esse nome porque simplifica as quatro rodas do nosso veículo em apenas duas (uma dianteira e uma traseira), posicionadas ao longo do eixo central longitudinal do chassi.
 
 **Por que usamos?**
@@ -174,23 +174,25 @@ Esse modelo cinemático é o coração geométrico que faz os algoritmos de Cont
 Para ter uma noção geral desse modelo, anexamos uma video aula da University of Luebeck do professor Georg Schildbach em que ele desenvolve todas as equações cinemáticas do modelo(funções horárias da velocidade), e há também uma aula gravada por nós, que, sem desenvolver muito as funções, explicita melhor esse modelo.
 
 aula do you tube: https://www.youtube.com/watch?v=HqNdBiej23I
-nossa aula: https://drive.google.com/drive/folders/1i2RLIqJ51yxYU1YGerNFYHo_kMkyF3uq
+nossa aula: https://drive.google.com/drive/folders/1AQ3nlOd4ylHc00Sj_EYYLJ-DSeD4EUqg
 
-### 3.4 Pure Pursuit -- Controle Lateral
-O *Pure Pursuit* é um controlador lateral puramente geométrico. Imagine que o nosso carro está "perseguindo" um ponto virtual (*look-ahead point*) que está alguns metros à frente na trajetória[cite: 1]. O algoritmo desenha um arco de circunferência perfeito saindo do eixo traseiro do carro até atingir esse alvo.
-*   **Prós:** Muito robusto, simples de implementar em C/C++ ou Python[cite: 1] e fácil de sintonizar.
-*   **Contras:** Pode acabar "cortando curvas" se configurarmos o ponto de perseguição longe demais.
+### 3.4 O Controlador Stanley -- Controlador lateral
+Agora que temos a física do carro modelada (Modelo Bicicleta), precisamos de um algoritmo que tome as decisões de volante. No nosso controle de Driverless, utilizamos exclusivamente o **Controlador Stanley**.
 
-*(Sugestão: Adicionar um desenho mostrando o arco do Pure Pursuit ligando o carro a um waypoint no mapa)*
+Desenvolvido pela equipe de Stanford (vencedora do DARPA Grand Challenge), o Stanley é um controlador geométrico não-linear que atua de forma muito agressiva contra erros de trajetória. Em vez de olhar para um ponto distante à frente do carro, ele toma como referência o centro do **eixo dianteiro** do nosso modelo bicicleta.
 
-### 3.5 Controlador Stanley -- Controle Lateral 
-Desenvolvido pela equipe de Stanford (vencedora do DARPA Grand Challenge), o *Stanley* é um controlador lateral que atua de forma diferente. Em vez de olhar para um ponto distante, ele toma como referência o centro do **eixo dianteiro** do nosso modelo bicicleta e busca minimizar dois erros simultaneamente:
-1.  **Erro de Trilha (Cross-track error):** A distância perpendicular do eixo dianteiro até a linha ideal da trajetória.
-2.  **Erro de Orientação (Heading error):** A diferença angular entre para onde o carro está apontando ($\psi$) e para onde a pista está indo.
+O trabalho do Stanley é minimizar dois erros simultaneamente a cada ciclo de processamento da nossa Jetson:
+1.  **Erro de Trilha (Cross-track error - $e$):** A distância perpendicular do eixo dianteiro até a linha ideal da trajetória enviada pelo Mapeamento.
+2.  **Erro de Orientação (Heading error - $\psi_e$):** A diferença angular entre para onde o nariz do nosso carro está apontando e para onde a pista está indo.
 
-O Stanley costuma apresentar uma resposta de direção mais natural e precisa em curvas fechadas e manobras agressivas do que o Pure Pursuit.
+**Por que usamos o Stanley?**
+Ele garante que o carro fique "colado" na trajetória ideal. Se o carro sofrer um escorregamento forte e sair da pista, o Stanley calcula um ângulo de esterçamento severo para trazer o eixo dianteiro de volta para a linha o mais rápido possível, ajustando a força dessa correção de acordo com a velocidade do carro.
 
-### 3.3 PID (Proporcional, Integral, Derivativo) -- Controle Longitudinal 
+![alt text](image-1.png)
+
+nossa aula: https://drive.google.com/drive/folders/1AQ3nlOd4ylHc00Sj_EYYLJ-DSeD4EUqg
+
+### 3.5 PID (Proporcional, Integral, Derivativo) -- Controle Longitudinal 
 *(Sugestão: Inserir um GIF de um sistema (como um pêndulo ou mola) oscilando e depois estabilizando com PID)*
 
 O PID não é um modelo físico, mas sim o algoritmo de malha fechada mais clássico e versátil da engenharia de controle. Ele calcula uma força de correção baseada em três pilares do erro (a diferença entre onde estamos e onde queremos estar):
@@ -202,3 +204,17 @@ No Driverless, usamos PIDs para tarefas de baixo nível, como garantir que o mot
 
 Vídeo do YouTube: 
 
+## 4. Simulink e Matlab
+
+Ótimo! Agora que você já tem uma boa noção de dinâmica veicular, modelos, controladores e como tudo se conecta na nossa micro, vamos falar de como de fato implementamos todos esses conhecimentos no carro! E por isso vamos apresentar agora as duas principais ferramentas que vamos utilizar: o matlab e o simulink.
+
+### O Matlab
+
+Chegamos nele! No Matlab! Eu já sei que vocês já devem ter escutado algo(bom com certeza) desse software tão conhecido pelos engenheiros, e por mais que seja intimidador para quem nunca nem abriu ele, de fato, ele é tão simples quanto matemática básica e um pouquinho de python(não é python de fato tá, mas a linguagem do matlab é praticamente igual a python)
+
+
+
+https://matlabacademy.mathworks.com/details/simulink-onramp/simulink
+https://matlabacademy.mathworks.com/details/matlab-onramp/gettingstarted
+https://matlabacademy.mathworks.com/details/stateflow-onramp/stateflow
+https://matlabacademy.mathworks.com/details/system-composer-onramp/orsc
