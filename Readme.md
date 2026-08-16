@@ -61,7 +61,7 @@ Recomendamos que, para manter seu sistema operacional de preferência (como o Wi
 
 > Tutorial Docker para ROS2: https://www.youtube.com/watch?v=oix-Qs75O08
 
-### 1.4 Python/C/C++ ----falta falar de c
+### 1.4 C/C++/Python
 Grande notícia! Na distribuição Ubuntu, Python já vem instalado nativamente. Inclusive, no Linux, muitas coisas são extremamente facilitadas quando o assunto é instalação de programas ou dependências. Para verificar a versão instalada, rode no terminal:
 
     python3 --version
@@ -88,7 +88,8 @@ Caso não esteja instalado, rode:
     sudo apt install build-essential
 
 ### 1.5 MATLAB & Simulink
-O MATLAB é uma plataforma de computação numérica e programação. Ele tem sua linguagem de programação própria também chamada de MATLAB e apresenta um ambiente gráfico de modelagem de sistemas chamado **Simulink**. É no Simulink onde grande parte de controle acontece, pois nele criamos nossos modelos e todo o dinâmismo dos nossos sistemas. Recomenda-se baixar o MATLAB para Linux.  
+Ótimo! Agora vamos aprender um pouco sobre as ferramentas que conectam no nosso carro. E por isso vamos apresentar agora as duas principais ferramentas que vamos utilizar: o matlab e o simulink. \
+O MATLAB é uma plataforma de computação numérica e programação. Ele tem sua linguagem de programação própria também chamada de MATLAB e apresenta um ambiente gráfico de modelagem de sistemas chamado **Simulink**. É no Simulink onde grande parte de controle acontece, pois nele criamos nossos modelos e todo o dinâmismo dos nossos sistemas. Recomenda-se baixar o MATLAB para Linux. \
 Para Baixar o MATLAB, você (como aluno da Unicamp), deverá criar uma conta como seu e-mail da DAC, famosa Diretoria Acadêmica, pois assim você obterá a licensa da plataforma MATLAB de forma gratuita!  
 
 > Link para instalação do MATLAB: https://www.mathworks.com/downloads/ \
@@ -239,11 +240,29 @@ Vídeo do YouTube:
 
 ### O Matlab
 
-Chegamos nele! No Matlab! Eu já sei que vocês já devem ter escutado algo(bom com certeza) desse software tão conhecido pelos engenheiros, e por mais que seja intimidador para quem nunca nem abriu ele, de fato, ele é tão simples quanto matemática básica e um pouquinho de python(não é python de fato tá, mas a linguagem do matlab é praticamente igual a python)
+Chegamos nele! No Matlab! Eu já sei que vocês já devem ter escutado algo(bom com certeza) desse software tão conhecido pelos engenheiros, e por mais que seja intimidador para quem nunca nem abriu ele, de fato, ele é tão simples quanto matemática básica e um pouquinho de python(não é python de fato tá, mas a linguagem do matlab é praticamente igual a python) \
+\
+O MATLAB é uma plataforma de computação numérica e programação. Ele tem sua linguagem de programação própria também chamada de MATLAB e apresenta um ambiente gráfico de modelagem de sistemas chamado **Simulink**. É no Simulink onde grande parte de controle acontece, pois nele criamos nossos modelos e todo o dinâmismo dos nossos sistemas. Recomenda-se baixar o MATLAB para Linux. \
+Para Baixar o MATLAB, você (como aluno da Unicamp), deverá criar uma conta como seu e-mail da DAC, famosa Diretoria Acadêmica, pois assim você obterá a licensa da plataforma MATLAB de forma gratuita!  
 
+> Link para instalação do MATLAB: https://www.mathworks.com/downloads/ \
+> Tutorial MATLAB: https://matlabacademy.mathworks.com/details/matlab-onramp/gettingstarted \
+> Tutorial Simulink: https://matlabacademy.mathworks.com/details/simulink-onramp/simulink
 
+Obs: caso queira se familiarizar um pouco com a linguagem MATLAB, desenvolvi um tutorial rápido justamente pra você, bixo que nem sabe MC102 direito ainda. Para acessar o tutorial basta abrir o outro arquivo markdown neste mesmo diretório.  
+  
+- Stateflow: ferramenta integrada ao Simulink para modelar lógicas baseadas em estados, transições e eventos, ou seja, o Stateflow permite representar a lógica em alto nível do controlador. Exemplo: o Stateflow pode representar estados do carro como *Inicialização*, *Aguardando*, *Emergência*.
 
-https://matlabacademy.mathworks.com/details/simulink-onramp/simulink
-https://matlabacademy.mathworks.com/details/matlab-onramp/gettingstarted
-https://matlabacademy.mathworks.com/details/stateflow-onramp/stateflow
-https://matlabacademy.mathworks.com/details/system-composer-onramp/orsc 
+> Tutorial Stateflow: https://matlabacademy.mathworks.com/details/stateflow-onramp/stateflow
+
+- System Composer: ferramenta do MATLAB voltada para modelagem e arquitetura de sistemas. No contexto de Driverless, podemos utilizá-lo para representar a arquitetura do veículo e a relação entre os diferentes nós, (Percepção, Mapeamento, Controle e Telemetria). Por exemplo, podemos representar que o Mapeamento fornece uma trajetória para o Controle, enquanto o Controle envia comandos para o veículo. Enquanto o Simulink pode representar como um controlador funciona, o System Composer pode ajudar a representar onde esse controlador está inserido dentro do sistema e como ele se comunica com os demais componentes.
+
+> Tutorial System Composer: https://matlabacademy.mathworks.com/details/system-composer-onramp/orsc
+
+Recomendamos fortemente que você faça esses quatro cursos antes de querer tocar qualquer projeto de Controle. \
+## 5. Cenário Atual e Planos Futuros
+A microdivisão de Controle, atualmente (08/2026) passa por uma grande fase de documentação dos modelos do Simulink no GitLab - Thailon não fez a boa. Além disso, qualquer oportunidade de otimização de código/modelo não será passada em branco, e se preciso, modificaremos e documentaremos essas atualizações. No momento, nossos planos futuros são focar nos testes de DV que pretendemos realizar em breve. \
+\
+Muito obrigado por você que leu até aqui, acho que isso quer dizer que você deve ter o mínimo de curiosidade e noção para entender que essa é a melhor divisão da Unicamp E-Racing. Agora é por esse carro pra andar sozinho e partir pro abraço.  
+
+By Lucas Ética & Rafael Coutinhho
