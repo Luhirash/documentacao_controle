@@ -78,7 +78,36 @@ Para C++, o assunto muda um pouco. Python é uma linguagem interpretada, o que s
 
 O primeiro comando atualiza lista de programas em nossa máquina. O segundo instala de fato o pacote principal do C++, incluindo o compilador. Pronto! Temos o básico para conseguir programar nossos sistemas.
 
-### 1.5 ROS2
+Além disso, utilizamos precisamos conhecer um pouco da linguagem C para nossos projetos da divisão de Controle. Assim como C++, C é uma linguagem compilada e, além disso, ela já vem instalada em muitas distribuições Linux. Para verificar se C está instalado, precisamos verificar se o compilador *gcc* está instalado.
+
+    gcc --version
+
+Caso não esteja instalado, rode:
+
+    sudo apt update
+    sudo apt install build-essential
+
+### 1.5 MATLAB & Simulink
+O MATLAB é uma plataforma de computação numérica e programação. Ele tem sua linguagem de programação própria também chamada de MATLAB e apresenta um ambiente gráfico de modelagem de sistemas chamado **Simulink**. É no Simulink onde grande parte de controle acontece, pois nele criamos nossos modelos e todo o dinâmismo dos nossos sistemas. Recomenda-se baixar o MATLAB para Linux.  
+Para Baixar o MATLAB, você (como aluno da Unicamp), deverá criar uma conta como seu e-mail da DAC, famosa Diretoria Acadêmica, pois assim você obterá a licensa da plataforma MATLAB de forma gratuita!  
+
+> Link para instalação do MATLAB: https://www.mathworks.com/downloads/ \
+> Tutorial MATLAB: https://matlabacademy.mathworks.com/details/matlab-onramp/gettingstarted \
+> Tutorial Simulink: https://matlabacademy.mathworks.com/details/simulink-onramp/simulink
+
+Obs: caso queira se familiarizar um pouco com a linguagem MATLAB, desenvolvi um tutorial rápido justamente pra você, bixo que nem sabe MC102 direito ainda. Para acessar o tutorial basta abrir o outro arquivo markdown neste mesmo diretório.  
+  
+- Stateflow: ferramenta integrada ao Simulink para modelar lógicas baseadas em estados, transições e eventos, ou seja, o Stateflow permite representar a lógica em alto nível do controlador. Exemplo: o Stateflow pode representar estados do carro como *Inicialização*, *Aguardando*, *Emergência*.
+
+> Tutorial Stateflow: https://matlabacademy.mathworks.com/details/stateflow-onramp/stateflow
+
+- System Composer: ferramenta do MATLAB voltada para modelagem e arquitetura de sistemas. No contexto de Driverless, podemos utilizá-lo para representar a arquitetura do veículo e a relação entre os diferentes nós, (Percepção, Mapeamento, Controle e Telemetria). Por exemplo, podemos representar que o Mapeamento fornece uma trajetória para o Controle, enquanto o Controle envia comandos para o veículo. Enquanto o Simulink pode representar como um controlador funciona, o System Composer pode ajudar a representar onde esse controlador está inserido dentro do sistema e como ele se comunica com os demais componentes.
+
+> Tutorial System Composer: https://matlabacademy.mathworks.com/details/system-composer-onramp/orsc
+
+Recomendamos fortemente que você faça esses quatro cursos antes de querer tocar qualquer projeto de Controle.
+
+### 1.6 ROS2
 Agora, cuidaremos da instalação do ROS2 em nossa máquina Linux na versão 22.04 da distribuição Ubuntu. Além disso, explicamos como funciona o ROS2 no contexto da nossa divisão de Driverless, especialmente em Mapeamento. Para conferir com mais clareza cada etapa, assista ao conteúdo abaixo:
 
 > Parte 01 - Instalação do ROS2: https://drive.google.com/drive/folders/17aS0WbSZafMps24pM8jX_G5lp2kk-O29?hl=pt-br
@@ -173,8 +202,8 @@ Calcular a força, o escorregamento e a suspensão em quatro pneus separadamente
 Esse modelo cinemático é o coração geométrico que faz os algoritmos de Controle Lateral funcionarem.
 Para ter uma noção geral desse modelo, anexamos uma video aula da University of Luebeck do professor Georg Schildbach em que ele desenvolve todas as equações cinemáticas do modelo(funções horárias da velocidade), e há também uma aula gravada por nós, que, sem desenvolver muito as funções, explicita melhor esse modelo.
 
-aula do you tube: https://www.youtube.com/watch?v=HqNdBiej23I
-nossa aula: https://drive.google.com/drive/folders/1AQ3nlOd4ylHc00Sj_EYYLJ-DSeD4EUqg
+- aula do you tube: https://www.youtube.com/watch?v=HqNdBiej23I \
+- nossa aula: https://drive.google.com/drive/folders/1AQ3nlOd4ylHc00Sj_EYYLJ-DSeD4EUqg
 
 ### 3.4 O Controlador Stanley -- Controlador lateral
 Agora que temos a física do carro modelada (Modelo Bicicleta), precisamos de um algoritmo que tome as decisões de volante. No nosso controle de Driverless, utilizamos exclusivamente o **Controlador Stanley**.
