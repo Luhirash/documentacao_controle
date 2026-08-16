@@ -246,4 +246,4 @@ Chegamos nele! No Matlab! Eu já sei que vocês já devem ter escutado algo(bom 
 https://matlabacademy.mathworks.com/details/simulink-onramp/simulink
 https://matlabacademy.mathworks.com/details/matlab-onramp/gettingstarted
 https://matlabacademy.mathworks.com/details/stateflow-onramp/stateflow
-https://matlabacademy.mathworks.com/details/system-composer-onramp/orsc
+https://matlabacademy.mathworks.com/details/system-composer-onramp/orsc 
